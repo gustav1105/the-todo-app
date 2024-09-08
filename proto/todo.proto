@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package todo;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "/proto";
+
+// TodoService is the service that handles all task-related actions
+service TodoService {
+    // Adds a new task
+    rpc AddTask (AddTaskRequest) returns (AddTaskResponse);
+    // Retrieves a task by ID
+    rpc GetTask (GetTaskRequest) returns (GetTaskResponse);
+    // Retrieves all tasks
+    rpc GetTasks (GetTasksRequest) returns (GetTasksResponse);
+    // Marks a task as completed
+    rpc CompleteTask (CompleteTaskRequest) returns (CompleteTaskResponse);
+    // Marks a task as canceled
+    rpc CancelTask (CancelTaskRequest) returns (CancelTaskResponse);
+}
+
+// TaskStatus represents the status of a task
+enum TaskStatus {
+  TODO = 0;       // Task to be done
+  DUE = 1;        // Task due soon
+  OVERDUE = 2;    // Task is overdue
+  CANCELLED = 3;  // Task is canceled
+  COMPLETED = 4;  // Task is completed
+}
+
+// Task represents a task with all its details
+message Task {
+  int32 id = 1;                              // Unique identifier for the task
+  string name = 2;                           // Name of the task
+  string note = 3;                           // Additional note for the task
+  TaskStatus status = 4;                     // Status of the task
+  google.protobuf.Timestamp dueOn = 5;       // Due date of the task
+}
+
+// AddTaskRequest is the request message for adding a task
+message AddTaskRequest {
+  Task task = 1;                             // Task to be added
+}
+
+// AddTaskResponse is the response message for adding a task
+message AddTaskResponse {
+  Task task = 1;                             // The added task
+}
+
+// GetTaskRequest is the request message for retrieving a single task
+message GetTaskRequest {
+  int32 id = 1;                              // ID of the task to retrieve
+}
+
+// GetTaskResponse is the response message for retrieving a single task
+message GetTaskResponse {
+  Task task = 1;                             // The retrieved task
+}
+
+// GetTasksRequest is the request message for retrieving all tasks
+message GetTasksRequest {}
+
+// GetTasksResponse is the response message for retrieving all tasks
+message GetTasksResponse {
+  repeated Task tasks = 1;                   // List of all tasks
+}
+
+// CompleteTaskRequest is the request message for marking a task as completed
+message CompleteTaskRequest {
+  int32 id = 1;                              // ID of the task to mark as completed
+}
+
+// CompleteTaskResponse is the response message for marking a task as completed
+message CompleteTaskResponse {
+  Task task = 1;                             // The updated task
+}
+
+// CancelTaskRequest is the request message for canceling a task
+message CancelTaskRequest {
+  int32 id = 1;                              // ID of the task to mark as canceled
+}
+
+// CancelTaskResponse is the response message for canceling a task
+message CancelTaskResponse {
+  Task task = 1;                             // The updated task
+}
+
